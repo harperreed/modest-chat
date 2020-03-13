@@ -1,0 +1,20 @@
+{
+  "name": "company-lol-functions",
+  "description": "Cloud Functions for company.lo",
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "firebase": "",
+    "firebase-admin": "",
+    "firebase-functions": "",
+    "request": "",
+    "twilio": "^3.19.1",
+    "twilio-video": "^2.1.0"
+  },
+  "private": true,
+  "devDependencies": {
+    "firebase-functions-test": "^0.1.6"
+  }
+}
