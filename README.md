@@ -7,11 +7,18 @@ Originally it was based on the [OpenTokNodeJS](https://github.com/songz/OpenTokN
 This version is the same kind of example, but from twilio. Again, it is refactored to work out we want it.
 
 
+## TODO
+
+* authentication
+* clean up design
+* rainbows
+* make room handling be based on URL
+
 ---
 
-## Running the functions locally
+## Running the locally
 
-to run the functions locally, you need to place the following into the `.runtimeconfig.json` file. 
+to run the locally, you need to place the following into the `.runtimeconfig.json` file in your functions dir. 
 
 
     {
@@ -22,6 +29,6 @@ to run the functions locally, you need to place the following into the `.runtime
         }
     }
 
-Then run the functions: 
+Then run the app : 
 
-`harper@ {~/modest-video-chat/functions}$ firebase serve --only functions`
+`harper@ {~/modest-video-chat/}$ firebase serve`
