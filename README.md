@@ -9,10 +9,11 @@ This version is the same kind of example, but from twilio. Again, it is refactor
 
 ## TODO
 
-* authentication
+* [authentication](https://github.com/harperreed/modest-chat/issues/1)
+* [make room handling be based on URL](https://github.com/harperreed/modest-chat/issues/2)
 * clean up design
 * rainbows
-* make room handling be based on URL
+
 
 ---
 
