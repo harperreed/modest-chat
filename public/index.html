@@ -5,43 +5,32 @@
 
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
     <title>Video chatting in room</title>
+      <script src="/__/firebase/7.11.0/firebase-app.js"></script>
+      <script src="/__/firebase/7.11.0/firebase-auth.js"></script>
+      <script src="/__/firebase/7.11.0/firebase-analytics.js"></script>
+      <script src="/__/firebase/init.js"></script>
+    
+    <link rel="stylesheet" href="/css/room.css" />
 
-    <link rel="stylesheet" href="/css/twilio-index.css" />
-    <lisnk rel="stylesheet" href="/css/room.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   </head>
   <body>
     <div id="topbar">
-      <div id="local-media"></div>
-      <div id="title">You!</div>
-      <div id="title"><a href="/logout">Logout</a></div>
-  </div>
-    <div id="remote-media"></div>
-    <div id="controls" class="container-fluid">
-    
-      <div id="room-controls">
-        <p class="instructions">Room Name</p>
-        <input id="room-name" type="text" placeholder="Enter a room name"  value="harper"/>
-        <button
-          id="button-join"
-          type="submit"
-          class="btn btn-primary btn-block"
-        >
-          Join Room
-        </button>
-        <button
-          id="button-leave"
-          type="submit"
-          class="btn btn-primary btn-block"
-        >
-          Leave Room
-        </button>
-      </div>
-      
+      <div class="local" id="local-media"></div>
+      <div class="info">You!</div>
+      <div class="control"><a href="#" id="logout">Logout</a></div>
     </div>
+    <div id="remote-media"></div>
+ 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="/js/twilio-index.js"></script>
+    <script src="//media.twiliocdn.com/sdk/js/video/releases/2.2.0/twilio-video.min.js"></script>
+    <script>
+      const Video = Twilio.Video;
+    </script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/room.js"></script>
+   
   </body>
 </html>
