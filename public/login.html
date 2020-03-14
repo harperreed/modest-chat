@@ -1,90 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Chat</title>
- 
-  <link rel="stylesheet" href="/css/twilio-index.css" />
-  <link rel="stylesheet" href="/css/rsoom.css" />
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>Sample FirebaseUI App</title>
 
-  <style>
+    <script src="/__/firebase/7.11.0/firebase-app.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-auth.js"></script>
+    <script src="/__/firebase/7.11.0/firebase-analytics.js"></script>
+    <script src="/__/firebase/init.js"></script>
 
-  body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #eee;
-}
-
-.form-signin {
-  max-width: 330px;
-  padding: 15px;
-  margin: 0 auto;
-}
-.form-signin .form-signin-heading,
-.form-signin .checkbox {
-  margin-bottom: 10px;
-}
-.form-signin .checkbox {
-  font-weight: normal;
-}
-.form-signin .form-control {
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 10px;
-  font-size: 16px;
-}
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-footer{
-    position: fixed;
-    bottom: 0px;
-    text-align:center;
-    font-family: sans-serif;
-    font-size: 13px;
-    padding-bottom: 10px;
-    width: 100%;
-}
-  </style>
-
-</head>
-<body>
-<center></center>
-
-  <div class="container">
+    
+    <script src="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.5.0/firebase-ui-auth.css" />
+    <script type="text/javascript">
+      // FirebaseUI config.
+      var uiConfig = {
+        callbacks: {
+          signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+            var user = authResult.user;
+            var credential = authResult.credential;
+            var isNewUser = authResult.additionalUserInfo.isNewUser;
+            var providerId = authResult.additionalUserInfo.providerId;
+            var operationType = authResult.operationType;
+            // Do something with the returned AuthResult.
+            // Return type determines whether we continue the redirect automatically
+            // or whether we leave that to developer to handle.
+            return true;
+          },
+          signInFailure: function (error) {
+            // Some unrecoverable error occurred during sign-in.
+            // Return a promise when error handling is completed and FirebaseUI
+            // will reset, clearing any UI. This commonly occurs for error code
+            // 'firebaseui/anonymous-upgrade-merge-conflict' when merge conflict
+            // occurs. Check below for more details on this.
+            return handleUIError(error);
+          },
+          uiShown: function () {
+            // The widget is rendered.
+            // Hide the loader.
+            document.getElementById('loader').style.display = 'none';
+          }
+        },
+        credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
+        // Query parameter name for mode.
+        queryParameterForWidgetMode: 'mode',
+        // Query parameter name for sign in success url.
+        queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
+        // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+        signInFlow: 'popup',
+        signInSuccessUrl: 'test.html',
+        signInOptions: [
+          // Leave the lines as is for the providers you want to offer your users.
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
 
 
-      <form class="form-signin" role="form">
-    <p><img width="330" src="http://www.modest.com/modest_logo.svg"></p>
-    <br />
-    <p>
-    <a href="/auth/google/" class="btn btn-lg btn-primary btn-block">Login with google</a>
-    <a href="/auth/digest/" class="btn btn-lg btn-primary btn-block">Login with http</a>
-    </p>
-      </form>
+          {
+            provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            // Whether the display name should be displayed in the Sign Up page.
+            requireDisplayName: true
+          },
+          
 
-    </div> <!-- /container -->
+        ],
+        // Set to true if you only have a single federated provider like
+        // firebase.auth.GoogleAuthProvider.PROVIDER_ID and you would like to
+        // immediately redirect to the provider's site instead of showing a
+        // 'Sign in with Provider' button first. In order for this to take
+        // effect, the signInFlow option must also be set to 'redirect'.
+        immediateFederatedRedirect: false,
+        // tosUrl and privacyPolicyUrl accept either url string or a callback
+        // function.
+        // Terms of service url/callback.
+        tosUrl: '<your-tos-url>',
+        // Privacy policy url/callback.
+        privacyPolicyUrl: function () {
+          window.location.assign('<your-privacy-policy-url>');
+        }
+      };
 
-<footer>
-<a href="mailto:info@modest.com">info@modest.com</a> &middot; &copy; 2014 Modest, Inc.
-</footer>
-
-  <script src="/js/index.js" type="text/javascript"></script>
-
-</body>
-</html>
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      // The start method will wait until the DOM is loaded.
+      ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+  </head>
+  
+  <body>
+    <!-- The surrounding HTML is left untouched by FirebaseUI.
+           Your app may use that space for branding, controls and other customizations.-->
+    <h1>Welcome to My Awesome App</h1>
+    <div id="firebaseui-auth-container"></div>
+    <div id="loader">Loading...</div>
+  </body>
+  
+  </html>
