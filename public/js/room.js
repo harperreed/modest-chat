@@ -36,19 +36,18 @@ function connectRoom(roomName){
 
 function videoConnect(token, options){
     
-
-    var previewContainer = document.getElementById('local-media');
-    if (!previewContainer.querySelector('video')) {
-        //attachTracks(getTracks(room.localParticipant), previewContainer);
-    }
     var remoteMediaContainer = $("#remote-media")
+    var localMediaContainer = $("#local-media")
     console.log(remoteMediaContainer)
 
 
     Video.connect(token, options).then(room => {
         console.log('Connected to Room "%s"', room.name);
 
-
+        
+        room.localParticipant.tracks.forEach(publication => {
+                trackSubscribed(localMediaContainer, publication.track);
+        });
         
         room.participants.forEach(participantConnected);
         room.on('participantConnected', function (participant) {
@@ -61,12 +60,12 @@ function videoConnect(token, options){
         // Handle RemoteTracks published after connecting to the Room.
         room.on('trackPublished', trackPublished);
         room.on('participantDisconnected', participantDisconnected);
-        room.on('disconnected', disconnect );
+        room.on('disconnected', disconnected );
     });
 
 }
 
-function disconnect (room, error) {
+function disconnected (room, error) {
     if (error) {
         console.log('Unexpectedly disconnected:', error);
     }

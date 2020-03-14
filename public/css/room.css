@@ -1,0 +1,67 @@
+@import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
+
+
+body #topbar {
+  width: 100px;
+  top: 0px;
+  left: 0px;
+  position: fixed;
+  z-index: 10000;
+  border: 1px solid #000;
+}
+
+body #topbar .info,
+body #topbar .controls {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 20px;
+  text-align: center;
+  z-index: 15;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+body #topbar #local-media {
+  z-index: 10;
+  width: 100px;
+  height: 79px;
+  top: 0px;
+  left: 0px;
+
+}
+
+
+body #topbar #local-media video {
+  max-width: 100%;
+  max-height: 100%;
+  border: none;
+  
+}
+
+
+div#controls {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+div#remote-media {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 43%;
+  width: 100%;
+  background-color: #fff;
+  text-align: center;
+  margin: auto;
+}
+
+div#remote-media video {
+  border: 1px solid #272726;
+  max-width: 80% !important;
+  background-repeat: no-repeat;
+  background-color: lightgrey !important;
+
+  background-position: 50%;
+}
