@@ -1,12 +1,19 @@
+let localRoom
+
+
 
 $('#logout').click(function () {
     console.log('Leaving room...');
+    
     disconnect();
     signOut()
     
     return false;
 });
 
+// When we are about to transition away from this page, disconnect
+// from the room, if joined.
+window.addEventListener('beforeunload', leaveRoomIfJoined);
 
 
 
@@ -14,7 +21,7 @@ $('#logout').click(function () {
 /* --------------- video handling --------------- */
 
 
-let localRoom
+
 
 function connectRoom(roomName){
     firebase.auth().currentUser.getIdToken().then(function (token) {
@@ -70,9 +77,23 @@ function videoConnect(token, options){
         
         // Handle RemoteTracks published after connecting to the Room.
         room.on('trackPublished', trackPublished);
+        room.on('trackDisabled', trackDisabled);
+        room.on('trackUnpublished', trackUnpublished);
         room.on('participantDisconnected', participantDisconnected);
         room.on('disconnected', disconnected );
         room.on('dominantSpeakerChanged', dominantSpeaker);
+
+        room.on('reconnected', () => {
+            console.log('Reconnected!');
+        });
+
+        room.on('reconnecting', error => {
+            if (error.code === 53001) {
+              console.log('Reconnecting your signaling connection!', error.message);
+            } else if (error.code === 53405) {
+              console.log('Reconnecting your media connection!', error.message);
+            }
+          });
 
         participantMutedOrUnmutedMedia(room, mediaMuted, mediaUnmuted);
 
@@ -111,11 +132,25 @@ function disconnected (room, error) {
     console.log("disconnecting")
     
     room.localParticipant.tracks.forEach(function (track) {
-        track.stop();
-        track.detach();
+        console.log(track)
+        if (track != null){
+            track.stop();
+            track.detach();
+            track.disconnect()
+        }
     });
     room.participants.forEach(participantDisconnected)
 };
+
+
+
+function trackDisabled(track, participant) {
+    console.log(`RemoteParticipant ${participant.sid} disabled Track ${track.trackSid}`);
+}
+
+function trackUnpublished(track, participant) {
+    console.log(`RemoteParticipant ${participant.sid} unpublished Track ${track.trackSid}`);
+}
 
 
 function trackPublished(publication, participant) {
@@ -198,11 +233,23 @@ function trackSubscribed(div, track) {
 }
 
 function trackUnsubscribed(track) {
-    track.detach().forEach(element => element.remove());
+    track.detach().forEach(element => {
+        element.remove()
+    });
+}
+
+
+// Leave Room.
+function leaveRoomIfJoined() {
+  if (localRoom) {
+    localRoom.disconnect();
+  }
 }
 
 function disconnect(roomName) {
     console.log("Safely Disconnected. lol")
+    localRoom.localParticipant.tracks.forEach(function(track){ track.unpublish();}); 
+    leaveRoomIfJoined()
 }
 
 
