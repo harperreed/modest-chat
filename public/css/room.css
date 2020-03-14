@@ -1,4 +1,8 @@
-@import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
+
+.action{
+ cursor: pointer;
+
+}
 
 
 body #topbar {
@@ -22,11 +26,28 @@ body #topbar .controls {
   text-align: center;
   z-index: 15;
   background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
 }
 
-body #topbar .controls a{
+body #topbar .controls .action{
   font-weight: bolder;
   color: #000;
+  margin:auto;
+}
+
+body #topbar .controls .action:hover{
+  font-weight: bolder;
+  color: #444;
+}
+
+body #topbar .controls .active{
+
+  color: red;
+
+}
+body #topbar .controls .active:hover{
+
+  color: #444;
 }
 
 body #topbar #local-media {

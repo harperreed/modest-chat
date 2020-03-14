@@ -7,6 +7,15 @@ $('#logout').click(function () {
     return false;
 });
 
+
+
+
+
+/* --------------- video handling --------------- */
+
+
+let localRoom
+
 function connectRoom(roomName){
     firebase.auth().currentUser.getIdToken().then(function (token) {
         $.ajaxSetup({
@@ -31,6 +40,7 @@ function connectRoom(roomName){
             };
             
             videoConnect(data.token, connectOptions)
+            
         });
     })
 }
@@ -63,6 +73,8 @@ function videoConnect(token, options){
         room.on('participantDisconnected', participantDisconnected);
         room.on('disconnected', disconnected );
         room.on('dominantSpeakerChanged', dominantSpeaker);
+
+        localRoom = room
     });
 
 }
@@ -71,7 +83,7 @@ function videoConnect(token, options){
 function dominantSpeaker(participant){
     console.log('A new RemoteParticipant is now the dominant speaker:', participant);
     console.log(participant.sid)
-    $("#"+participant.sid).remove();
+
     /* let's do somethign cool here */
 }
 
@@ -146,6 +158,21 @@ function trackSubscribed(div, track) {
         track.once('started', () => console.log(track));
     }
     */
+    
+    /*
+    participantMutedOrUnmutedMedia(roomP2, track => {
+        track.detach().forEach(element => {
+            element.remove();
+        });
+    }, track => {
+      if (track.kind === 'audio') {
+        audioPreview.appendChild(track.attach());
+      }
+      if (track.kind === 'video') {
+        videoPreview.appendChild(track.attach());
+      }
+    });
+    */
 
     div.append(track.attach());
 }
@@ -157,3 +184,147 @@ function trackUnsubscribed(track) {
 function disconnect(roomName) {
     console.log("Safely Disconnected. lol")
 }
+
+
+
+/* ----- mute handlers ----- */
+
+// Muting audio track and video tracks click handlers
+$('#audioToggle').click(function () {
+    toggleMuteAudio();
+});
+
+function toggleMuteAudio() {
+    toggle = $('#audioToggle')
+    onIcon = "fa-volume-down"
+    offIcon = "fa-volume-mute"
+    const mute = !$('#audioToggle').hasClass(offIcon);
+    if(mute) {
+        console.log("Muting local audio")
+        toggle.removeClass(onIcon);
+        toggle.addClass(offIcon);
+        toggle.addClass("active");
+
+        muteYourAudio(localRoom);
+      
+
+    } else {
+        console.log("Unmuting local audio")
+        toggle.removeClass(offIcon);
+        toggle.addClass(onIcon);
+        toggle.removeClass("active");
+        unmuteYourAudio(localRoom);
+    }
+}
+
+
+$('#videoToggle').click(function () {
+    toggleMuteVideo();
+  });
+
+function toggleMuteVideo() {
+    toggle = $('#videoToggle')
+    onIcon = "fa-video"
+    offIcon = "fa-video-slash"
+    const mute = !toggle.hasClass(offIcon);
+    if(mute) {
+        console.log("Disabling local video")
+        toggle.removeClass(onIcon);
+        toggle.addClass(offIcon);
+        toggle.addClass("active");
+
+        muteYourVideo(localRoom);
+    
+    } else {
+        console.log("Enabling local video")
+        toggle.removeClass(offIcon);
+        toggle.addClass(onIcon);
+        toggle.removeClass("active");
+        unmuteYourVideo(localRoom);
+    }
+}
+
+
+ 
+
+
+/* ----- mute lib ----- */
+
+/*
+https://github.com/shashank76/twilio_video_call_demo/blob/e90ffe4529e04376bca0db45e73b7b3093cad1dc/examples/localmediacontrols/src/index.js
+*/
+
+
+/**
+ * Mute/unmute your media in a Room.
+ * @param {Room} room - The Room you have joined
+ * @param {'audio'|'video'} kind - The type of media you want to mute/unmute
+ * @param {'mute'|'unmute'} action - Whether you want to mute/unmute
+ */
+function muteOrUnmuteYourMedia(room, kind, action) {
+    const publications = kind === 'audio'
+      ? room.localParticipant.audioTracks
+      : room.localParticipant.videoTracks;
+  
+    publications.forEach(function(publication) {
+      if (action === 'mute') {
+        publication.track.disable();
+      } else {
+        publication.track.enable();
+      }
+    });
+  }
+  
+  /**
+   * Mute your audio in a Room.
+   * @param {Room} room - The Room you have joined
+   * @returns {void}
+   */
+  function muteYourAudio(room) {
+    muteOrUnmuteYourMedia(room, 'audio', 'mute');
+  }
+  
+  /**
+   * Mute your video in a Room.
+   * @param {Room} room - The Room you have joined
+   * @returns {void}
+   */
+  function muteYourVideo(room) {
+    muteOrUnmuteYourMedia(room, 'video', 'mute');
+  }
+  
+  /**
+   * Unmute your audio in a Room.
+   * @param {Room} room - The Room you have joined
+   * @returns {void}
+   */
+  function unmuteYourAudio(room) {
+    muteOrUnmuteYourMedia(room, 'audio', 'unmute');
+  }
+  
+  /**
+   * Unmute your video in a Room.
+   * @param {Room} room - The Room you have joined
+   * @returns {void}
+   */
+  function unmuteYourVideo(room) {
+    muteOrUnmuteYourMedia(room, 'video', 'unmute');
+  }
+  
+  /**
+   * A RemoteParticipant muted or unmuted its media.
+   * @param {Room} room - The Room you have joined
+   * @param {function} onMutedMedia - Called when a RemoteParticipant muted its media
+   * @param {function} onUnmutedMedia - Called when a RemoteParticipant unmuted its media
+   * @returns {void}
+   */
+  function participantMutedOrUnmutedMedia(room, onMutedMedia, onUnmutedMedia) {
+    room.on('trackSubscribed', function(track, publication, participant) {
+      track.on('disabled', function() {
+        return onMutedMedia(track, participant);
+      });
+      track.on('enabled', function() {
+        return onUnmutedMedia(track, participant);
+      });
+    });
+  }

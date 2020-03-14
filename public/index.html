@@ -13,12 +13,22 @@
     <link rel="stylesheet" href="/css/room.css" />
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/f8230c5983.js" crossorigin="anonymous"></script>
+
   </head>
   <body>
+    
+    
     <div id="topbar">
       <div class="local" id="local-media"></div>
-      <div class="controls"><a href="#" id="logout">Log out <i class="fas fa-sign-out-alt"></i></a></div>
+      <div class="controls">
+        <i id="logout" class="action fa fa-sign-out-alt"></i>
+
+        <i id="audioToggle"  class="action fa fa-volume-down" muted="fa-volume-mute" notmuted="fa-volume-down"></i>
+
+        <i id="videoToggle"  class="action fa fa-video" muted="fa-video-slash" notmuted="fa-video" alt="fa-video"></i>
+
+      </div>
     </div>
     <div id="remote-media"></div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
