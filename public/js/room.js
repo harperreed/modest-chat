@@ -24,7 +24,8 @@ function connectRoom(roomName){
         $.getJSON("/token", { room: roomName }, function (data) {
             identity = data.identity;
             var connectOptions = {
-                video: { width: 640 },
+                audio: true,
+                video: { width: 640 , height: 480},
                 name: roomName,
                 //logLevel: 'debug'
             };
@@ -61,8 +62,17 @@ function videoConnect(token, options){
         room.on('trackPublished', trackPublished);
         room.on('participantDisconnected', participantDisconnected);
         room.on('disconnected', disconnected );
+        room.on('dominantSpeakerChanged', dominantSpeaker);
     });
 
+}
+
+
+function dominantSpeaker(participant){
+    console.log('A new RemoteParticipant is now the dominant speaker:', participant);
+    console.log(participant.sid)
+    $("#"+participant.sid).remove();
+    /* let's do somethign cool here */
 }
 
 function disconnected (room, error) {
@@ -131,11 +141,11 @@ function participantDisconnected(participant) {
 function trackSubscribed(div, track) {
 
     /* track info */
-
+    /*
     if (track.kind === 'video') {
         track.once('started', () => console.log(track));
     }
-
+    */
 
     div.append(track.attach());
 }
