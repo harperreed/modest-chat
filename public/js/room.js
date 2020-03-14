@@ -24,6 +24,7 @@ function connectRoom(roomName){
         $.getJSON("/token", { room: roomName }, function (data) {
             identity = data.identity;
             var connectOptions = {
+                video: { width: 640 },
                 name: roomName,
                 //logLevel: 'debug'
             };
@@ -52,7 +53,6 @@ function videoConnect(token, options){
         room.participants.forEach(participantConnected);
         room.on('participantConnected', function (participant) {
             console.log("Joining: '" + participant.identity + "'");
-            console.log(room.getStats())
             participantConnected(participant);
         });
         
@@ -97,7 +97,7 @@ function participantConnected(participant) {
     
     const participantInfo = $("<div>")
     participantInfo.addClass("info"); 
-    participantInfo.innerText = participant.identity;
+    participantInfo.text(participant.identity);
 
     const participantMedia= $("<div>")
     participantMedia.addClass("media"); 
@@ -113,6 +113,8 @@ function participantConnected(participant) {
     participant.tracks.forEach(publication => {
         if (publication.isSubscribed) {
             trackSubscribed(participantMedia, publication.track);
+        }else{
+            //participantDisconnected(participant)
         }
     });
 
@@ -122,10 +124,19 @@ function participantConnected(participant) {
 
 function participantDisconnected(participant) {
     console.log('Participant "%s" disconnected', participant.identity);
-    $(participant.sid).remove();
+    console.log(participant.sid)
+    $("#"+participant.sid).remove();
 }
 
 function trackSubscribed(div, track) {
+
+    /* track info */
+
+    if (track.kind === 'video') {
+        track.once('started', () => console.log(track));
+    }
+
+
     div.append(track.attach());
 }
 

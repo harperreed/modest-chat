@@ -5,9 +5,8 @@ initApp = function () {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             console.log("Logged in")
-            window.user = user
-            connectRoom("harper")
-
+            window.user = user;
+            connectRoom("harper");
         } else {
             window.location.href = "/login.html"
         }
