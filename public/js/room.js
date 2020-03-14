@@ -56,7 +56,6 @@ function videoConnect(token, options){
     Video.connect(token, options).then(room => {
         console.log('Connected to Room "%s"', room.name);
 
-        
         room.localParticipant.tracks.forEach(publication => {
                 trackSubscribed(localMediaContainer, publication.track);
         });
@@ -67,12 +66,13 @@ function videoConnect(token, options){
             participantConnected(participant);
         });
         
-
         // Handle RemoteTracks published after connecting to the Room.
         room.on('trackPublished', trackPublished);
         room.on('participantDisconnected', participantDisconnected);
         room.on('disconnected', disconnected );
         room.on('dominantSpeakerChanged', dominantSpeaker);
+
+        participantMutedOrUnmutedMedia(room, mediaMuted, mediaUnmuted);
 
         localRoom = room
     });
@@ -119,11 +119,29 @@ function participantConnected(participant) {
     
     const participantInfo = $("<div>")
     participantInfo.addClass("info"); 
-    participantInfo.text(participant.identity);
+    const participantName = $("<div>")
+    participantName.addClass("name");
+    participantName.text(participant.identity);
+    participantInfo.append(participantName)
+
+    const participantStatus = $("<div>")
+    participantStatus.addClass("status"); 
+
+    const participantAudioStatus = $("<span>")
+    participantAudioStatus.addClass("audio"); 
+    const participantVideoStatus = $("<span>")
+    participantVideoStatus.addClass("video"); 
+
+    
+    participantStatus.append(participantAudioStatus)
+    participantStatus.append(participantVideoStatus)
 
     const participantMedia= $("<div>")
     participantMedia.addClass("media"); 
 
+
+    
+    participantDiv.append(participantStatus)
     participantDiv.append(participantInfo)
     participantDiv.append(participantMedia)
     
@@ -139,9 +157,6 @@ function participantConnected(participant) {
             //participantDisconnected(participant)
         }
     });
-
-
-   
 }
 
 function participantDisconnected(participant) {
@@ -159,20 +174,7 @@ function trackSubscribed(div, track) {
     }
     */
     
-    /*
-    participantMutedOrUnmutedMedia(roomP2, track => {
-        track.detach().forEach(element => {
-            element.remove();
-        });
-    }, track => {
-      if (track.kind === 'audio') {
-        audioPreview.appendChild(track.attach());
-      }
-      if (track.kind === 'video') {
-        videoPreview.appendChild(track.attach());
-      }
-    });
-    */
+    
 
     div.append(track.attach());
 }
@@ -244,7 +246,38 @@ function toggleMuteVideo() {
     }
 }
 
+function mediaMuted(track, participant){
+    console.log("Participant muted track")
+    videoOffIcon = "fa-video-slash"
+    audioOffIcon = "fa-volume-mute"
 
+
+    if (track.kind == 'audio'){
+        icon = $("<i>")
+        icon.attr('id', "audioMute_" + participant.sid)
+        icon.addClass("fa");
+        icon.addClass(audioOffIcon);
+        $('#' + participant.sid + ' .status .audio').append(icon)
+    }
+
+    if (track.kind == 'video'){
+        icon = $("<i>")
+        icon.attr('id', "videoMute_" + participant.sid)
+        icon.addClass("fa");
+        icon.addClass(videoOffIcon);
+        $('#' + participant.sid + ' .status .video').append(icon)
+    }
+}
+
+function mediaUnmuted(track, participant){
+    console.log("Participant unmuted track")
+    if (track.kind == 'audio'){
+        $('#audioMute_' + participant.sid).remove()
+    }
+    if (track.kind == 'video'){
+        $('#videoMute_' + participant.sid).remove()
+    }
+}
  
 
 

@@ -96,7 +96,39 @@ div#remote-media .participant .info{
   width: 100%;
   color: rgb(255, 255, 255); 
   mix-blend-mode: difference;
+
 }
+
+div#remote-media .participant .status{
+  top: 0px;
+  position: absolute;
+  text-align: center;
+  font-weight: bolder;
+  width: 100%;
+  color: red; 
+  mix-blend-mode: difference;
+
+
+}
+
+div#remote-media .participant .status .audio{
+
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+div#remote-media .participant .status .video{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+
+
+div#remote-media .participant .info .name{
+  margin: auto;
+}
+
 
 div#remote-media .participant .media img{
   width: 100%;
