@@ -36,6 +36,8 @@ function connectRoom(roomName){
                 audio: true,
                 video: { width: 640 , height: 480},
                 name: roomName,
+                dominantSpeaker: true,
+
                 //logLevel: 'debug'
             };
             
@@ -81,8 +83,23 @@ function videoConnect(token, options){
 
 
 function dominantSpeaker(participant){
-    console.log('A new RemoteParticipant is now the dominant speaker:', participant);
-    console.log(participant.sid)
+    console.log('A new RemoteParticipant is now the dominant speaker:');
+
+
+    $(".participant").forEach(function (parti) {
+        parti.removeClass('dominant')
+        parti.addClass('non-dominant')
+    });
+
+    if (dominantSpeakerChanged!=null){
+        $("#"+participant.sid).addClass('dominant');
+    }
+
+
+
+    
+
+
 
     /* let's do somethign cool here */
 }
@@ -116,7 +133,9 @@ function participantConnected(participant) {
     const participantDiv = $("<div>")
     participantDiv.addClass("participant"); 
     participantDiv.attr('id', participant.sid)
+    participantDiv.addClass("non-dominant"); 
     
+
     const participantInfo = $("<div>")
     participantInfo.addClass("info"); 
     const participantName = $("<div>")
@@ -161,7 +180,6 @@ function participantConnected(participant) {
 
 function participantDisconnected(participant) {
     console.log('Participant "%s" disconnected', participant.identity);
-    console.log(participant.sid)
     $("#"+participant.sid).remove();
 }
 

@@ -82,11 +82,22 @@ div#remote-media {
 }
 
 div#remote-media .participant{
-  border: 1px solid;
+  
   flex: flex-grow;
   margin: auto;  /* Magic! */
   position: relative;
 }
+
+.non-dominant {
+  border: 1px solid #666;
+  color: rgb(255, 255, 255);
+}
+
+.dominant {
+  border: 1px solid red;
+  color: red;
+}
+
 
 div#remote-media .participant .info{
   bottom: 0px;
