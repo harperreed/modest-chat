@@ -7,7 +7,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "firebase": "",
-    "firebase-admin": "^8.10.0",
+    "firebase-admin": "^11.5.0",
     "firebase-functions": "^3.3.0",
     "request": "",
     "twilio": "^3.19.1",
