@@ -8,9 +8,9 @@
     "cors": "^2.8.5",
     "firebase": "",
     "firebase-admin": "^11.5.0",
-    "firebase-functions": "^3.3.0",
+    "firebase-functions": "^3.24.1",
     "request": "",
-    "twilio": "^3.19.1",
+    "twilio": "^5.3.1",
     "twilio-video": "^2.1.0"
   },
   "private": true,
