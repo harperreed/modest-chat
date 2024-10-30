@@ -1,4 +1,3 @@
-
 .action{
  cursor: pointer;
 
@@ -151,4 +150,23 @@ div#remote-media .participant .media video{
   width: 100%;
   height: 100%
 
+}
+
+/* Add styles to support dynamic resizing of video elements */
+div#remote-media .participant {
+  transition: width 0.5s, height 0.5s;
+}
+
+/* Ensure video elements are large and centered for one-on-one calls */
+div#remote-media.one-on-one .participant {
+  width: 80%;
+  height: 80%;
+  margin: auto;
+}
+
+/* Ensure video elements resize to fit all participants for group calls */
+div#remote-media.group-call .participant {
+  width: calc(100% / var(--num-participants));
+  height: auto;
+  margin: 0.5%;
 }

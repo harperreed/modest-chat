@@ -1,7 +1,5 @@
 let localRoom
 
-
-
 $('#logout').click(function () {
     console.log('Leaving room...');
     
@@ -15,13 +13,7 @@ $('#logout').click(function () {
 // from the room, if joined.
 window.addEventListener('beforeunload', leaveRoomIfJoined);
 
-
-
-
 /* --------------- video handling --------------- */
-
-
-
 
 function connectRoom(roomName){
     firebase.auth().currentUser.getIdToken().then(function (token) {
@@ -54,13 +46,11 @@ function connectRoom(roomName){
     })
 }
 
-
 function videoConnect(token, options){
     
     var remoteMediaContainer = $("#remote-media")
     var localMediaContainer = $("#local-media")
     console.log(remoteMediaContainer)
-
 
     Video.connect(token, options).then(room => {
         console.log('Connected to Room "%s"', room.name);
@@ -73,6 +63,7 @@ function videoConnect(token, options){
         room.on('participantConnected', function (participant) {
             console.log("Joining: '" + participant.identity + "'");
             participantConnected(participant);
+            resizeVideos();
         });
         
         // Handle RemoteTracks published after connecting to the Room.
@@ -98,14 +89,13 @@ function videoConnect(token, options){
         participantMutedOrUnmutedMedia(room, mediaMuted, mediaUnmuted);
 
         localRoom = room
+        resizeVideos();
     });
 
 }
 
-
 function dominantSpeaker(participant){
     console.log('A new RemoteParticipant is now the dominant speaker:');
-
 
     $(".participant").forEach(function (parti) {
         parti.removeClass('dominant')
@@ -115,12 +105,6 @@ function dominantSpeaker(participant){
     if (dominantSpeakerChanged!=null){
         $("#"+participant.sid).addClass('dominant');
     }
-
-
-
-    
-
-
 
     /* let's do somethign cool here */
 }
@@ -142,8 +126,6 @@ function disconnected (room, error) {
     room.participants.forEach(participantDisconnected)
 };
 
-
-
 function trackDisabled(track, participant) {
     console.log(`RemoteParticipant ${participant.sid} disabled Track ${track.trackSid}`);
 }
@@ -152,25 +134,23 @@ function trackUnpublished(track, participant) {
     console.log(`RemoteParticipant ${participant.sid} unpublished Track ${track.trackSid}`);
 }
 
-
 function trackPublished(publication, participant) {
     console.log(`RemoteParticipant ${participant.sid} published Track ${publication.trackSid}`);
 }
-
-
 
 function participantConnected(participant) {
     var container = $("#remote-media")
     console.log('Participant "%s" connected', participant.identity);
     
+
     removeStaleParticipants(); // P7346
+
 
     const participantDiv = $("<div>")
     participantDiv.addClass("participant"); 
     participantDiv.attr('id', participant.sid)
     participantDiv.addClass("non-dominant"); 
     
-
     const participantInfo = $("<div>")
     participantInfo.addClass("info"); 
     const participantName = $("<div>")
@@ -186,15 +166,12 @@ function participantConnected(participant) {
     const participantVideoStatus = $("<span>")
     participantVideoStatus.addClass("video"); 
 
-    
     participantStatus.append(participantAudioStatus)
     participantStatus.append(participantVideoStatus)
 
     const participantMedia= $("<div>")
     participantMedia.addClass("media"); 
 
-
-    
     participantDiv.append(participantStatus)
     participantDiv.append(participantInfo)
     participantDiv.append(participantMedia)
@@ -215,20 +192,12 @@ function participantConnected(participant) {
 
 function participantDisconnected(participant) {
     console.log('Participant "%s" disconnected', participant.identity);
-    $("#"+participant.sid).remove(); // P7272
+
+    $("#"+participant.sid).remove();
+
 }
 
 function trackSubscribed(div, track) {
-
-    /* track info */
-    /*
-    if (track.kind === 'video') {
-        track.once('started', () => console.log(track));
-    }
-    */
-    
-    
-
     div.append(track.attach());
 }
 
@@ -237,7 +206,6 @@ function trackUnsubscribed(track) {
         element.remove()
     });
 }
-
 
 // Leave Room.
 function leaveRoomIfJoined() {
@@ -251,6 +219,7 @@ function disconnect(roomName) {
     localRoom.localParticipant.tracks.forEach(function(track){ track.unpublish();}); 
     leaveRoomIfJoined()
 }
+
 
 function removeStaleParticipants() {
     $("#remote-media .participant").each(function() {
@@ -285,7 +254,6 @@ function toggleMuteAudio() {
 
         muteYourAudio(localRoom);
       
-
     } else {
         console.log("Unmuting local audio")
         toggle.removeClass(offIcon);
@@ -294,7 +262,6 @@ function toggleMuteAudio() {
         unmuteYourAudio(localRoom);
     }
 }
-
 
 $('#videoToggle').click(function () {
     toggleMuteVideo();
@@ -327,7 +294,6 @@ function mediaMuted(track, participant){
     videoOffIcon = "fa-video-slash"
     audioOffIcon = "fa-volume-mute"
 
-
     if (track.kind == 'audio'){
         icon = $("<i>")
         icon.attr('id', "audioMute_" + participant.sid)
@@ -354,15 +320,12 @@ function mediaUnmuted(track, participant){
         $('#videoMute_' + participant.sid).remove()
     }
 }
- 
-
 
 /* ----- mute lib ----- */
 
 /*
 https://github.com/shashank76/twilio_video_call_demo/blob/e90ffe4529e04376bca0db45e73b7b3093cad1dc/examples/localmediacontrols/src/index.js
 */
-
 
 /**
  * Mute/unmute your media in a Room.
@@ -437,3 +400,31 @@ function muteOrUnmuteYourMedia(room, kind, action) {
       });
     });
   }
+
+
+/* ----- video resizing ----- */
+
+/**
+ * Resize video elements based on the number of participants.
+ */
+function resizeVideos() {
+    const participants = $(".participant");
+    const numParticipants = participants.length;
+
+    if (numParticipants === 1) {
+        // One-on-one call: large and centered
+        participants.css({
+            width: '80%',
+            height: '80%',
+            margin: 'auto'
+        });
+    } else {
+        // Group call: fit all participants on the screen
+        const width = 100 / Math.ceil(Math.sqrt(numParticipants)) + '%';
+        participants.css({
+            width: width,
+            height: 'auto',
+            margin: '0.5%'
+        });
+    }
+}
