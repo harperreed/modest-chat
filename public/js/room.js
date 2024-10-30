@@ -52,46 +52,35 @@ function videoConnect(token, options){
     var localMediaContainer = $("#local-media")
     console.log(remoteMediaContainer)
 
-    Video.connect(token, options).then(room => {
-        console.log('Connected to Room "%s"', room.name);
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+            localMediaContainer.append(stream);
+            const peerConnection = new RTCPeerConnection();
+            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
 
-        room.localParticipant.tracks.forEach(publication => {
-                trackSubscribed(localMediaContainer, publication.track);
+            peerConnection.ontrack = event => {
+                const [stream] = event.streams;
+                remoteMediaContainer.append(stream);
+            };
+
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    // Send the candidate to the remote peer
+                }
+            };
+
+            peerConnection.createOffer()
+                .then(offer => peerConnection.setLocalDescription(offer))
+                .then(() => {
+                    // Send the offer to the remote peer
+                });
+        })
+        .catch(error => {
+            console.error('Error accessing media devices.', error);
         });
-        
-        room.participants.forEach(participantConnected);
-        room.on('participantConnected', function (participant) {
-            console.log("Joining: '" + participant.identity + "'");
-            participantConnected(participant);
-            resizeVideos();
-        });
-        
-        // Handle RemoteTracks published after connecting to the Room.
-        room.on('trackPublished', trackPublished);
-        room.on('trackDisabled', trackDisabled);
-        room.on('trackUnpublished', trackUnpublished);
-        room.on('participantDisconnected', participantDisconnected);
-        room.on('disconnected', disconnected );
-        room.on('dominantSpeakerChanged', dominantSpeaker);
 
-        room.on('reconnected', () => {
-            console.log('Reconnected!');
-        });
-
-        room.on('reconnecting', error => {
-            if (error.code === 53001) {
-              console.log('Reconnecting your signaling connection!', error.message);
-            } else if (error.code === 53405) {
-              console.log('Reconnecting your media connection!', error.message);
-            }
-          });
-
-        participantMutedOrUnmutedMedia(room, mediaMuted, mediaUnmuted);
-
-        localRoom = room
-        resizeVideos();
-    });
-
+    localRoom = { peerConnection };
+    resizeVideos();
 }
 
 function dominantSpeaker(participant){
