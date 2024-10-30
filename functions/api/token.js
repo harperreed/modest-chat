@@ -4,7 +4,7 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-try {admin.initializeApp(functions.config().firebase);} catch(e) {} // You do that because the admin SDK can only be initialized once.
+try {admin.initializeApp();} catch(e) {} // You do that because the admin SDK can only be initialized once.
 var db = admin.firestore();
 var randomName = require('../randomname');
 var AccessToken = require('twilio').jwt.AccessToken;

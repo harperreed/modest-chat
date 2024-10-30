@@ -22,7 +22,7 @@ const cors = require('cors')({ origin: true });
 // ---------------------------------------------------------------------------
 // [START helpers]
 
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 admin.database.enableLogging(false);
 
 var db = admin.firestore();
