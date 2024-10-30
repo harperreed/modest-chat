@@ -7,14 +7,10 @@ const admin = require('firebase-admin');
 try {admin.initializeApp(functions.config().firebase);} catch(e) {} // You do that because the admin SDK can only be initialized once.
 var db = admin.firestore();
 var randomName = require('../randomname');
-var AccessToken = require('twilio').jwt.AccessToken;
-var VideoGrant = AccessToken.VideoGrant;
 
 // [END functionsimport]
 // ---------------------------------------------------------------------------
 // [START additionalimports]
-
-
 
 // [END additionalimports]
 // ---------------------------------------------------------------------------
@@ -76,32 +72,9 @@ exports = module.exports = functions.https.onRequest(async(request, response) =>
       return;
     }
     
-    
-
-
-
-
-    // Create an access token which we will sign and return to the client,
-    // containing the grant we just created.
-    var token = new AccessToken(
-        functions.config().twilio.account_sid,
-        functions.config().twilio.api_key,
-        functions.config().twilio.api_secret,
-      { ttl: MAX_ALLOWED_SESSION_DURATION }
-    );
-  
-    // Assign the generated identity to the token.
-    token.identity = identity;
-  
-    // Grant the access token Twilio Video capabilities.
-    var grant = new VideoGrant();
-    token.addGrant(grant);
-  
-    // Serialize the token to a JWT string and include it in a JSON response.
     response.send({
       room_name: room_name,
       identity: identity,
-      token: token.toJwt(),
       user_info: decodedIdToken
     });
 });
