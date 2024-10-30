@@ -163,7 +163,7 @@ function participantConnected(participant) {
     var container = $("#remote-media")
     console.log('Participant "%s" connected', participant.identity);
     
-    
+    removeStaleParticipants(); // P7346
 
     const participantDiv = $("<div>")
     participantDiv.addClass("participant"); 
@@ -215,7 +215,7 @@ function participantConnected(participant) {
 
 function participantDisconnected(participant) {
     console.log('Participant "%s" disconnected', participant.identity);
-    $("#"+participant.sid).remove();
+    $("#"+participant.sid).remove(); // P7272
 }
 
 function trackSubscribed(div, track) {
@@ -250,6 +250,17 @@ function disconnect(roomName) {
     console.log("Safely Disconnected. lol")
     localRoom.localParticipant.tracks.forEach(function(track){ track.unpublish();}); 
     leaveRoomIfJoined()
+}
+
+function removeStaleParticipants() {
+    $("#remote-media .participant").each(function() {
+        const participantDiv = $(this);
+        const participantSid = participantDiv.attr('id');
+        const participant = localRoom.participants.get(participantSid);
+        if (!participant) {
+            participantDiv.remove();
+        }
+    });
 }
 
 
