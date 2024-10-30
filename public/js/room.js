@@ -142,6 +142,10 @@ function participantConnected(participant) {
     var container = $("#remote-media")
     console.log('Participant "%s" connected', participant.identity);
     
+
+    removeStaleParticipants(); // P7346
+
+
     const participantDiv = $("<div>")
     participantDiv.addClass("participant"); 
     participantDiv.attr('id', participant.sid)
@@ -188,8 +192,9 @@ function participantConnected(participant) {
 
 function participantDisconnected(participant) {
     console.log('Participant "%s" disconnected', participant.identity);
+
     $("#"+participant.sid).remove();
-    resizeVideos();
+
 }
 
 function trackSubscribed(div, track) {
@@ -214,6 +219,20 @@ function disconnect(roomName) {
     localRoom.localParticipant.tracks.forEach(function(track){ track.unpublish();}); 
     leaveRoomIfJoined()
 }
+
+
+function removeStaleParticipants() {
+    $("#remote-media .participant").each(function() {
+        const participantDiv = $(this);
+        const participantSid = participantDiv.attr('id');
+        const participant = localRoom.participants.get(participantSid);
+        if (!participant) {
+            participantDiv.remove();
+        }
+    });
+}
+
+
 
 /* ----- mute handlers ----- */
 
@@ -381,6 +400,7 @@ function muteOrUnmuteYourMedia(room, kind, action) {
       });
     });
   }
+
 
 /* ----- video resizing ----- */
 
