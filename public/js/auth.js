@@ -6,7 +6,8 @@ initApp = function () {
         if (user) {
             console.log("Logged in")
             window.user = user;
-            connectRoom("harper");
+            const roomName = window.location.pathname.split('/').pop() || 'default';
+            connectRoom(roomName);
         } else {
             window.location.href = "/login.html"
         }
@@ -17,11 +18,7 @@ initApp = function () {
 
 window.addEventListener('load', function () {
     initApp();
-    
-
 });
-
-
 
 function signOut() {
     firebase.auth().signOut()

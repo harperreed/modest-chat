@@ -35,7 +35,7 @@ const MAX_ALLOWED_SESSION_DURATION = 14400;
 exports = module.exports = functions.https.onRequest(async(request, response) => {
 
     
-    var room_name = request.query.room_name;
+    var room_name = request.query.room;
     var identity = request.query.identity || randomName();
     
     //test bearer function
