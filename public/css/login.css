@@ -1,21 +1,21 @@
 body {
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #eee;
-  }
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+    background-color: #f7fafc;
+}
 
-  .container{
+.container {
     text-align: center;
-  }
+}
 
- 
-
-  footer {
+footer {
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
     text-align: center;
     font-family: sans-serif;
-    font-size: 13px;
-    padding-bottom: 10px;
+    font-size: 0.875rem;
+    padding-bottom: 0.625rem;
     width: 100%;
-  }
+    background-color: #2d3748;
+    color: #fff;
+}

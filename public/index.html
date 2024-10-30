@@ -12,25 +12,24 @@
     
     <link rel="stylesheet" href="/css/room.css" />
 
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/f8230c5983.js" crossorigin="anonymous"></script>
 
   </head>
-  <body>
+  <body class="bg-gray-100">
     
     
-    <div id="topbar">
+    <div id="topbar" class="fixed top-0 left-0 w-full bg-gray-800 text-white flex items-center justify-between p-4">
       <div class="local" id="local-media"></div>
-      <div class="controls">
-        <i id="logout" class="action fa fa-sign-out-alt"></i>
-        <i id="audioToggle"  class="action fa fa-volume-down" muted="fa-volume-mute" notmuted="fa-volume-down"></i>
-        <i id="videoToggle"  class="action fa fa-video" muted="fa-video-slash" notmuted="fa-video" alt="fa-video"></i>
+      <div class="controls flex space-x-4">
+        <i id="logout" class="action fa fa-sign-out-alt cursor-pointer"></i>
+        <i id="audioToggle"  class="action fa fa-volume-down cursor-pointer" muted="fa-volume-mute" notmuted="fa-volume-down"></i>
+        <i id="videoToggle"  class="action fa fa-video cursor-pointer" muted="fa-video-slash" notmuted="fa-video" alt="fa-video"></i>
 
       </div>
     </div>
-    <div id="remote-media"></div>
+    <div id="remote-media" class="flex flex-wrap justify-center mt-20"></div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="/js/auth.js"></script>
     <script src="/js/room.js"></script>
    
