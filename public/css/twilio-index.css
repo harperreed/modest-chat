@@ -1,95 +1,52 @@
 @import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
 
-
-body #topbar{
-  width: 100px;
-  top: 0px;
-  left: 0px;
+body #topbar {
+  width: 24rem;
+  height: 18.75rem;
+  top: 0;
+  left: 0;
   position: fixed;
   z-index: 10000;
-  border: 1px solid #000;
+  border: 0;
+  background: #333;
 }
 
-body #topbar #title{
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  height: 20px;
+body #topbar .controls {
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   text-align: center;
   z-index: 15;
-  background-color:rgba(0,0,0,0.5);
-  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+}
+
+body #topbar .controls .action {
+  font-weight: bolder;
+  color: #000;
+  margin: auto;
+}
+
+body #topbar .controls .action:hover {
+  font-weight: bolder;
+  color: #444;
+}
+
+body #topbar .controls .active {
+  color: red;
+}
+
+body #topbar .controls .active:hover {
+  color: #444;
 }
 
 body #topbar #local-media {
   z-index: 10;
-  width: 100px;
-  height: 79px;
-  top: 0px;
-  left: 0px;
-}
-
-div#controls {
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-}
-
-div#remote-media {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  height: 43%;
-  width: 100%;
-  background-color: #fff;
-  text-align: center;
-  margin: auto;
-}
-
-div#remote-media video {
-  border: 1px solid #272726;
-  max-width: 80% !important;
-  background-repeat: no-repeat;
-  background-color: lightgrey !important;
- 
-  background-position: 50%;
-}
-
-div#controls div#room-controls,
-div#controls div#preview div#log {
-  width: 16em;
-  margin: 0 1.5em;
-  text-align: center;
-}
-
-div#controls div#preview button#button-preview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-div#controls div#preview button#button-preview img#button-preview-image {
-  padding-right: 1em;
-  color: white;
-}
-
-div#controls p.instructions {
-  text-align: left;
-  margin-bottom: 1em;
-  font-size: 1.25em;
-  color: #777776;
-}
-
-div#controls div#preview div#local-media {
-  width: 270px;
-  height: 202px;
-  border: 1px solid #cececc;
-  box-sizing: border-box;
-  margin: 0 auto;
-  background-color: lightgrey !important;
-  background-image: url("https://static0.twilio.com/marketing/bundles/archetype/img/logo-wordmark.svg");
-  background-position: 50%;
-  background-repeat: no-repeat;
+  width: 24rem;
+  height: 18.75rem;
+  top: 0;
+  left: 0;
 }
 
 body #topbar #local-media video {
@@ -98,52 +55,96 @@ body #topbar #local-media video {
   border: none;
 }
 
-button#button-preview {
-  width: 270px;
-}
-
-div#controls div#log {
-  border: 1px solid #686865;
-}
-
-div#controls div#room-controls {
+div#remote-media {
   display: flex;
-}
-
-div#controls div#room-controls input {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 43%;
   width: 100%;
-  height: 2.5em;
-  padding: 0.5em;
+  background-color: #fff;
   text-align: center;
+  margin: auto;
+  align-items: baseline;
+  align-content: center;
 }
 
-div#controls div#room-controls > button#button-leave {
-  display: none;
+div#remote-media .participant {
+  flex: flex-grow;
+  margin: auto;
+  position: relative;
+}
+
+.non-dominant {
+  border: 1px solid #666;
+  color: #fff;
+}
+
+.dominant {
+  border: 1px solid red;
+  color: red;
+}
+
+div#remote-media .participant .info {
+  bottom: 0;
+  position: absolute;
   text-align: center;
-  margin-top: 0;
+  font-weight: bolder;
+  width: 100%;
+  color: #fff;
+  mix-blend-mode: difference;
 }
 
-div#room-controls > button {
+div#remote-media .participant .status {
+  top: 0;
+  position: absolute;
   text-align: center;
+  font-weight: bolder;
+  width: 100%;
+  color: red;
+  mix-blend-mode: difference;
 }
 
-div#log {
-  width: 25em;
-  height: 15em;
-  min-height: 100%;
-  max-height: 100%;
-  margin-top: 3.125em;
-  text-align: left;
-  padding: 1.5em;
-  overflow-y: scroll;
+div#remote-media .participant .status .audio {
+  margin-left: 0.625rem;
+  margin-right: 0.625rem;
 }
 
-div#log p {
-  color: #686865;
-  font-family: "Share Tech Mono", "Courier New", Courier, fixed-width;
-  font-size: 1.25em;
-  line-height: 1.25em;
-  margin-left: 1em;
-  text-indent: -1.25em;
-  width: 90%;
+div#remote-media .participant .status .video {
+  margin-left: 0.625rem;
+  margin-right: 0.625rem;
+}
+
+div#remote-media .participant .info .name {
+  margin: auto;
+}
+
+div#remote-media .participant .media img {
+  width: 100%;
+  height: 100%;
+}
+
+div#remote-media .participant .media video {
+  background-color: lightgrey !important;
+  width: 100%;
+  height: 100%;
+}
+
+/* Add styles to support dynamic resizing of video elements */
+div#remote-media .participant {
+  transition: width 0.5s, height 0.5s;
+}
+
+/* Ensure video elements are large and centered for one-on-one calls */
+div#remote-media.one-on-one .participant {
+  width: 80%;
+  height: 80%;
+  margin: auto;
+}
+
+/* Ensure video elements resize to fit all participants for group calls */
+div#remote-media.group-call .participant {
+  width: calc(100% / var(--num-participants));
+  height: auto;
+  margin: 0.5%;
 }
