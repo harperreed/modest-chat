@@ -36,7 +36,7 @@ exports = module.exports = functions.https.onRequest(async(request, response) =>
 
     
     var room_name = request.query.room;
-    var identity = request.query.identity || randomName();
+    var identity;
     
     //test bearer function
 
@@ -66,17 +66,15 @@ exports = module.exports = functions.https.onRequest(async(request, response) =>
     }
 
 
-    /* 
     try {
       const decodedIdToken = await admin.auth().verifyIdToken(idToken)
       console.log('ID Token correctly decoded', decodedIdToken);
-
+      identity = decodedIdToken.name || decodedIdToken.uid;
     } catch (error) {
       console.error('Error while verifying Firebase ID token:', error);
       response.status(403).send('Unauthorized');
       return;
     }
-    */
     
     
 
@@ -103,7 +101,8 @@ exports = module.exports = functions.https.onRequest(async(request, response) =>
     response.send({
       room_name: room_name,
       identity: identity,
-      token: token.toJwt()
+      token: token.toJwt(),
+      user_info: decodedIdToken
     });
 });
 
