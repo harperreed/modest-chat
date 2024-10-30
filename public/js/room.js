@@ -100,10 +100,12 @@ function dominantSpeaker(participant){
     $(".participant").forEach(function (parti) {
         parti.removeClass('dominant')
         parti.addClass('non-dominant')
+        parti.find('.status').text(''); // Peb7b
     });
 
     if (dominantSpeakerChanged!=null){
         $("#"+participant.sid).addClass('dominant');
+        $("#"+participant.sid).find('.status').text('Dominant Speaker'); // P2f19
     }
 
     /* let's do somethign cool here */
